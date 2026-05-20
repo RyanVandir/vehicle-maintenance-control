@@ -7,17 +7,24 @@ import com.ryan.vehicle_maintenance_control.infrastructure.adapters.out.persiten
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class VehicleServicePersistenceTest {
-    private final VehicleRepository vehicleRepository = Mockito.mock(VehicleRepository.class);
-    private final VehicleMapper mapper = Mockito.mock(VehicleMapper.class);
-    VehicleServicePersistence vehicleServicePersistence = new VehicleServicePersistence(vehicleRepository, mapper);
+    @Mock
+    private VehicleRepository vehicleRepository;
+    @Mock
+    private VehicleMapper mapper;
+
+    @InjectMocks
+    VehicleServicePersistence vehicleServicePersistence;
 
     private VehicleEntity vehicleEntity;
     private VehicleModel vehicleModel;
@@ -39,23 +46,30 @@ class VehicleServicePersistenceTest {
 
     @Test
     void save() {
-        when(mapper.toModel(vehicleEntity)).thenReturn(vehicleModel);
-        when(vehicleRepository.save(mapper.toEntity(vehicleModel)))
+        when(mapper.toEntity(vehicleModel))
                 .thenReturn(vehicleEntity);
 
-        VehicleModel vehicleModel1 = vehicleServicePersistence.save(vehicleModel);
-        Assertions.assertNotNull(vehicleModel1);
-        Assertions.assertEquals(vehicleModel, vehicleModel1);
+        when(mapper.toModel(vehicleEntity))
+                .thenReturn(vehicleModel);
+
+        when(vehicleRepository.save(vehicleEntity))
+                .thenReturn(vehicleEntity);
+
+        VehicleModel result = vehicleServicePersistence.save(vehicleModel);
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(vehicleModel, result);
     }
 
     @Test
     void findAll() {
-        when(mapper.toModels(List.of(vehicleEntity))).thenReturn(List.of(vehicleModel));
+        when(mapper.toModels(List.of(vehicleEntity)))
+                .thenReturn(List.of(vehicleModel));
+
         when(vehicleRepository.findAll())
                 .thenReturn(List.of(vehicleEntity));
 
-        List<VehicleModel> vehicleModels = vehicleServicePersistence.findAll();
-        Assertions.assertNotNull(vehicleModels);
-        Assertions.assertEquals(vehicleModels.size(), 1);
+        List<VehicleModel> result = vehicleServicePersistence.findAll();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(1, result.size());
     }
 }

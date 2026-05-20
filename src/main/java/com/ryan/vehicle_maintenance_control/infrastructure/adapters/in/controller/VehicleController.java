@@ -19,7 +19,7 @@ public class VehicleController {
     private final VehicleMapper mapper;
 
     @PostMapping
-    public ResponseEntity<VehicleRequestDTO> postCar(@RequestBody VehicleRequestDTO request) {
+    public ResponseEntity<VehicleRequestDTO> created(@RequestBody VehicleRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(
                         mapper.toRequest(
@@ -38,5 +38,4 @@ public class VehicleController {
                         )
                 );
     }
-
 }
