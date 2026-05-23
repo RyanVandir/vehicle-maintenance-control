@@ -3,7 +3,7 @@ package com.ryan.vehicle_maintenance_control.infrastructure.adapters.out.persite
 import com.ryan.vehicle_maintenance_control.application.mapper.VehicleMapper;
 import com.ryan.vehicle_maintenance_control.application.ports.out.VehicleRepositoryPort;
 import com.ryan.vehicle_maintenance_control.domain.exception.DatabaseException;
-import com.ryan.vehicle_maintenance_control.domain.model.VehicleModel;
+import com.ryan.vehicle_maintenance_control.domain.model.Vehicle;
 import com.ryan.vehicle_maintenance_control.infrastructure.adapters.out.persitence.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -20,11 +20,11 @@ public class VehicleServicePersistence implements VehicleRepositoryPort {
     private final VehicleMapper mapper;
 
     @Override
-    public VehicleModel save(VehicleModel vehicleModel) {
+    public Vehicle save(Vehicle vehicle) {
         try {
             return mapper.toModel(
                     repository.save(
-                            mapper.toEntity(vehicleModel)
+                            mapper.toEntity(vehicle)
                     )
             );
         } catch (DataIntegrityViolationException e) {
@@ -35,7 +35,7 @@ public class VehicleServicePersistence implements VehicleRepositoryPort {
     }
 
     @Override
-    public List<VehicleModel> findAll() {
+    public List<Vehicle> findAll() {
         return mapper.toModels(
                 repository.findAll()
         );

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ryan.vehicle_maintenance_control.application.dto.VehicleRequestDTO;
 import com.ryan.vehicle_maintenance_control.application.mapper.VehicleMapper;
 import com.ryan.vehicle_maintenance_control.application.ports.in.VehicleUseCasePort;
-import com.ryan.vehicle_maintenance_control.domain.model.VehicleModel;
+import com.ryan.vehicle_maintenance_control.domain.model.Vehicle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +34,12 @@ class VehicleControllerTest {
     @MockitoBean
     private VehicleMapper mapper;
 
-    private VehicleModel vehicleModel;
+    private Vehicle vehicle;
     private VehicleRequestDTO vehicleRequestDTO;
 
     @BeforeEach
     void setUp() {
-        vehicleModel = new VehicleModel("Toyota",
+        vehicle = new Vehicle("Toyota",
                 "HDSVD",
                 2011,
                 "2.0 flex",
@@ -54,13 +54,13 @@ class VehicleControllerTest {
     @Test
     void created() throws Exception {
         when(mapper.toModel(any(VehicleRequestDTO.class)))
-                .thenReturn(vehicleModel);
+                .thenReturn(vehicle);
 
-        when(mapper.toRequest(any(VehicleModel.class)))
+        when(mapper.toRequest(any(Vehicle.class)))
                 .thenReturn(vehicleRequestDTO);
 
-        when(vehicleUseCasePort.created(any(VehicleModel.class)))
-                .thenReturn(vehicleModel);
+        when(vehicleUseCasePort.created(any(Vehicle.class)))
+                .thenReturn(vehicle);
 
         mockMvc.perform(
                         post("/api/v1/carros")
@@ -75,13 +75,13 @@ class VehicleControllerTest {
                 .andExpect(jsonPath("$.ano")
                         .value(2011));
 
-        verify(vehicleUseCasePort).created(any(VehicleModel.class));
+        verify(vehicleUseCasePort).created(any(Vehicle.class));
     }
 
     @Test
     void findAll() throws Exception {
         when(vehicleUseCasePort.findAll())
-                .thenReturn(List.of(vehicleModel));
+                .thenReturn(List.of(vehicle));
         when(mapper.toRequests(anyList()))
                 .thenReturn(List.of(vehicleRequestDTO));
 

@@ -1,32 +1,15 @@
 package com.ryan.vehicle_maintenance_control.domain.model;
 
 import com.ryan.vehicle_maintenance_control.domain.exception.InvalidVehicleException;
-
-import java.time.LocalDate;
 import java.time.Year;
-import java.time.temporal.ChronoUnit;
 
-public class VehicleModel {
-
-    private static final int GARGALO_KM_ALERTA = 100; // ALERTA FALTANDO 100KM
-    private static final int GARGALO_DIAS_ALERTA = 7; // ALERTA FALTANDO 7 DIAS
+public class Vehicle {
 
     private String marca;
     private String modelo;
     private Integer ano;
     private String motor;
-    private Integer quilometragemAtual;
-
-    public boolean deveNotificar(int kmAtual, int kmProximaTroca, LocalDate dataAtual, LocalDate dataProximaTroca) {
-        int kmRestante = kmProximaTroca - kmAtual;
-        // validação da janela de km
-        boolean alertaKm = kmRestante <= GARGALO_KM_ALERTA;
-        // validação da janela de tempo (data)
-        long diasRestantes = ChronoUnit.DAYS.between(dataAtual, dataProximaTroca);
-        boolean alertaData = diasRestantes <= GARGALO_DIAS_ALERTA;
-
-        return alertaKm || alertaData;
-    }
+    private Integer kmAtual;
 
     public void validate(String marca, String modelo, Integer ano, String motor, Integer quilometragemAtual) {
         if (marca == null || marca.isBlank()) {
@@ -74,16 +57,16 @@ public class VehicleModel {
         return motor;
     }
 
-    public Integer getQuilometragemAtual() {
-        return quilometragemAtual;
+    public Integer getKmAtual() {
+        return kmAtual;
     }
 
-    public VehicleModel(String marca, String modelo, Integer ano, String motor, Integer quilometragemAtual) {
-        validate(marca, modelo, ano, motor, quilometragemAtual);
+    public Vehicle(String marca, String modelo, Integer ano, String motor, Integer kmAtual) {
+        validate(marca, modelo, ano, motor, kmAtual);
         this.marca = marca;
         this.modelo = modelo;
         this.ano = ano;
         this.motor = motor;
-        this.quilometragemAtual = quilometragemAtual;
+        this.kmAtual = kmAtual;
     }
 }

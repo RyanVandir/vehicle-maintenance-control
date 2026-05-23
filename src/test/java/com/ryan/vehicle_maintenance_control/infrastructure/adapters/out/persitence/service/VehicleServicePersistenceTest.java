@@ -1,7 +1,7 @@
 package com.ryan.vehicle_maintenance_control.infrastructure.adapters.out.persitence.service;
 
 import com.ryan.vehicle_maintenance_control.application.mapper.VehicleMapper;
-import com.ryan.vehicle_maintenance_control.domain.model.VehicleModel;
+import com.ryan.vehicle_maintenance_control.domain.model.Vehicle;
 import com.ryan.vehicle_maintenance_control.infrastructure.adapters.out.persitence.entity.VehicleEntity;
 import com.ryan.vehicle_maintenance_control.infrastructure.adapters.out.persitence.repository.VehicleRepository;
 import org.junit.jupiter.api.Assertions;
@@ -27,11 +27,11 @@ class VehicleServicePersistenceTest {
     VehicleServicePersistence vehicleServicePersistence;
 
     private VehicleEntity vehicleEntity;
-    private VehicleModel vehicleModel;
+    private Vehicle vehicle;
 
     @BeforeEach
     void setUp() {
-        vehicleModel = new VehicleModel("Toyota",
+        vehicle = new Vehicle("Toyota",
                 "HDSVD",
                 2011,
                 "2.0 flex",
@@ -46,29 +46,29 @@ class VehicleServicePersistenceTest {
 
     @Test
     void save() {
-        when(mapper.toEntity(vehicleModel))
+        when(mapper.toEntity(vehicle))
                 .thenReturn(vehicleEntity);
 
         when(mapper.toModel(vehicleEntity))
-                .thenReturn(vehicleModel);
+                .thenReturn(vehicle);
 
         when(vehicleRepository.save(vehicleEntity))
                 .thenReturn(vehicleEntity);
 
-        VehicleModel result = vehicleServicePersistence.save(vehicleModel);
+        Vehicle result = vehicleServicePersistence.save(vehicle);
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(vehicleModel, result);
+        Assertions.assertEquals(vehicle, result);
     }
 
     @Test
     void findAll() {
         when(mapper.toModels(List.of(vehicleEntity)))
-                .thenReturn(List.of(vehicleModel));
+                .thenReturn(List.of(vehicle));
 
         when(vehicleRepository.findAll())
                 .thenReturn(List.of(vehicleEntity));
 
-        List<VehicleModel> result = vehicleServicePersistence.findAll();
+        List<Vehicle> result = vehicleServicePersistence.findAll();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.size());
     }
